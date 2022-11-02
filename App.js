@@ -1,11 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import api from "./services/api";
+import { useState, useEffect } from "react";
 
 export default function App() {
+  const [books, setBooks] = useState([]);
+
+  useEffect(() => {
+    api.get("/cad-author/2").then(({ data }) => {
+      setBooks(data);
+    });
+  }, []);
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      {books?.map((book) => (
+        <Text key={book.id}>{book.name}</Text>
+      ))}
     </View>
   );
 }
@@ -13,8 +24,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
